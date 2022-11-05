@@ -1,7 +1,10 @@
 package Registraduria.seguridad.Controladores;
 
+import Registraduria.seguridad.Modelos.Permiso;
 import Registraduria.seguridad.Modelos.PermisoRol;
 import Registraduria.seguridad.Modelos.Rol;
+import Registraduria.seguridad.Repositorios.RepositorioPermiso;
+import Registraduria.seguridad.Repositorios.RepositorioPermisoRol;
 import Registraduria.seguridad.Repositorios.RepositorioRol;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -14,7 +17,7 @@ import java.util.List;
 @RequestMapping("/permiso-rol")
 public class ControladorPermisoRol {
     @Autowired
-    private RepositorioPermisosRol RepositorioPermisosRol;
+    private RepositorioPermisoRol RepositorioPermisosRol;
     @Autowired
     private RepositorioRol RepositorioRol;
     @Autowired
@@ -44,7 +47,9 @@ public class ControladorPermisoRol {
     @GetMapping("/validar-permiso/rol/{idRol}")
     public PermisoRol validarPermisosDelRol(@PathVariable String idRol, @RequestBody Permiso infoPermiso){
         Rol rolActual =RepositorioRol.findById(idRol).orElse(null);
-        Permiso permisoActual= RepositorioPermiso.findByUrlAndMethod(infoPermiso.getUrl(),infoPermiso.getMetodo());
+        Permiso permisoActual= RepositorioPermiso.getPermiso(infoPermiso.getUrl(),infoPermiso.getMetodo());
+
+
         if(rolActual != null && permisoActual !=null){
             String idRolActual =rolActual.get_id();
             String idPermisoActual= permisoActual.get_id();
