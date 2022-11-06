@@ -1,7 +1,9 @@
 package Registraduria.seguridad.Controladores;
 
 
+import Registraduria.seguridad.Modelos.Rol;
 import Registraduria.seguridad.Modelos.Usuario;
+import Registraduria.seguridad.Repositorios.RepositorioRol;
 import Registraduria.seguridad.Repositorios.RepositorioUsuario;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,48 +27,52 @@ public class ControladorUsuario {
     @Autowired
     RepositorioUsuario repositorioUsuario;
 
-    // @Autowired
-    // RepositorioRol repositorioRol;
+    @Autowired
+    RepositorioRol repositorioRol;
 
     @GetMapping
-    public List<Usuario> listarUsuarios(){
+    public List<Usuario> listarUsuarios() {
         return repositorioUsuario.findAll();
     }
 
     @GetMapping("{idUsuario}")
-    public  Usuario buscarUsuario(@PathVariable String idUsuario){
-        return  repositorioUsuario.findById(idUsuario).orElse(null);
+    public Usuario buscarUsuario(@PathVariable String idUsuario) {
+        return repositorioUsuario.findById(idUsuario).orElse(null);
     }
+
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Usuario crearUsuario(@RequestBody Usuario infoUsuario){
-        String password=convertirSHA256(infoUsuario.getContrasenia());
+    public Usuario crearUsuario(@RequestBody Usuario infoUsuario) {
+        String password = convertirSHA256(infoUsuario.getContrasenia());
         infoUsuario.setContrasenia(password);
         return repositorioUsuario.save(infoUsuario);
     }
+
     @PutMapping("{idUsuario}")
-    public Usuario actuaizarUsuario(@PathVariable String idUsuario, @RequestBody Usuario infoUsuario ){
-        Usuario usuarioActual =repositorioUsuario.findById(idUsuario).orElse(null);
-        if(usuarioActual != null){
+    public Usuario actuaizarUsuario(@PathVariable String idUsuario, @RequestBody Usuario infoUsuario) {
+        Usuario usuarioActual = repositorioUsuario.findById(idUsuario).orElse(null);
+        if (usuarioActual != null) {
             usuarioActual.setSeudonimo(infoUsuario.getSeudonimo());
             usuarioActual.setEmail(infoUsuario.getEmail());
             usuarioActual.setContrasenia(convertirSHA256(infoUsuario.getContrasenia()));
             return repositorioUsuario.save(usuarioActual);
-        }else {
+        } else {
             return null;
         }
     }
-    /*
-    @PutMapping("/{idUsuario}/rol/{idRol}}")
-    public Usuario asignarRolAlUsuario (@PathVariable String idUsuario,@PathVariable String idRol){
-        Usuario usuarioActual=repositorioUsuario.findById(idUsuario).orElse(null);
-        Rol rol= repositorioRol.findById(idRol).orElse(null);
-        if(usuarioActual!=null && rol != null){
-            usuarioActual.setRol(rol);
-        }else{
-            return null;
-        }
-    }*/
+
+    @PutMapping("/{idUsuario}/rol/{idRol}")
+    public Usuario asignarRolAlUsuario(@PathVariable String idUsuario, @PathVariable String idRol) {
+        Usuario usuarioActual = repositorioUsuario.findById(idUsuario).orElse(null);
+        Rol rol = repositorioRol.findById(idRol).orElse(null);
+            if (usuarioActual != null && rol != null) {
+                usuarioActual.setRol(rol);
+                return usuarioActual;
+            } else {
+                return null;
+            }
+    }
+
 
     @DeleteMapping("{idUsuario}")
     public void eliminarUsuario(@PathVariable String idUsuario){

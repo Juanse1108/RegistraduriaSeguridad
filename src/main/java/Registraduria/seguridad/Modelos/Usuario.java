@@ -12,7 +12,8 @@ public class Usuario {
     private String seudonimo;
     private String email;
     private  String contrasenia;
-    //private  Rol rol;
+
+    private  Rol rol;
 
     public Usuario(String seudonimo, String email, String contrasenia) {
         this.seudonimo = seudonimo;
