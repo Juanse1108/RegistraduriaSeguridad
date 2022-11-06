@@ -1,19 +1,35 @@
 package Registraduria.seguridad.Modelos;
 
+import lombok.Data;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Data
+@Document
 public class PermisoRol {
     @Id
-    private  String _id;
-    //para indicar que hace referencia a otro modelo de base de datos
+    private String _id;
     @DBRef
-    private  Rol rol;
+    private Rol rol;
     @DBRef
-    private  Permiso permiso;
+    private Permiso permiso;
+    public PermisoRol() {
+    }
+    public String get_id() {
+        return _id;
+    }
+    public Rol getRol() {
+        return rol;
+    }
 
-    public PermisoRol(Rol rol, Permiso permiso) {
+    public Permiso getPermiso() {
+        return permiso;
+    }
+    public void setRol(Rol rol) {
         this.rol = rol;
+    }
+    public void setPermiso(Permiso permiso) {
         this.permiso = permiso;
     }
 }
