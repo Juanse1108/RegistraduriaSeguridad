@@ -81,7 +81,7 @@ public class ControladorPermisoRol {
         }
     }
 
-    @GetMapping("validar-permiso/rol/{id_Rol}")
+    @GetMapping("validar-permiso/rol/{idRol}")
     public PermisoRol validarPermisosDelRol(@PathVariable String idRol, @RequestBody Permiso infoPermiso, HttpServletResponse response) throws IOException {
 
         //Buscar en base de datos el rol y permiso
@@ -109,6 +109,4 @@ public class ControladorPermisoRol {
         }
 
     }
-
-
 }
